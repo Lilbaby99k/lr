@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;500;700&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Poppins', sans-serif;
+}
+
+body {
+  background: linear-gradient(135deg, #0d0d0d, #1a1a1f);
+  color: #fff;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.container {
+  width: 85%;
+  max-width: 1100px;
+  background: rgba(0, 0, 0, 0.85);
+  border-radius: 20px;
+  padding: 40px;
+  box-shadow: 0 0 20px rgba(128, 0, 255, 0.3);
+  border: 2px solid rgba(128, 0, 255, 0.3);
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 40px;
+}
+
+header .logo {
+  font-weight: 700;
+  font-size: 20px;
+}
+
+nav a {
+  color: #aaa;
+  margin-left: 25px;
+  text-decoration: none;
+  transition: 0.3s;
+}
+
+nav a:hover {
+  color: #fff;
+}
+
+.login-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 40px;
+}
+
+.left h1 {
+  font-size: 38px;
+  margin-bottom: 10px;
+}
+
+.left p {
+  margin-bottom: 25px;
+  color: #b8b8b8;
+}
+
+.google-btn {
+  background: transparent;
+  border: 1px solid #444;
+  padding: 10px 20px;
+  display: flex;
+  align-items: center;
+  border-radius: 10px;
+  gap: 10px;
+  cursor: pointer;
+  color: #fff;
+}
+
+.google-btn img {
+  width: 20px;
+}
+
+.signup-text {
+  margin-top: 20px;
+  color: #b8b8b8;
+}
+
+.signup-text a {
+  color: #fff;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.glass {
+  background: rgba(255, 255, 255, 0.1);
+  padding: 40px;
+  border-radius: 20px;
+  backdrop-filter: blur(15px);
+  box-shadow: 0 0 20px rgba(128, 0, 255, 0.2);
+  flex: 1;
+}
+
+.glass input {
+  width: 100%;
+  padding: 12px;
+  margin-bottom: 20px;
+  border: none;
+  border-radius: 10px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+}
+
+.glass input::placeholder {
+  color: #bbb;
+}
+
+.login-btn {
+  width: 100%;
+  background: #8a6cff;
+  border: none;
+  padding: 12px;
+  border-radius: 10px;
+  color: #000;
+  font-weight: 600;
+  cursor: pointer;
+  transition: 0.3s;
+}
+
+.login-btn:hover {
+  background: #a084ff;
+}
+
+footer {
+  text-align: center;
+  margin-top: 40px;
+  color: #bbb;
+}

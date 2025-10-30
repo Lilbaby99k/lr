@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CourseCrate — Register</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">CourseCrate</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Features</a>
+        <a href="index.html">Login</a>
+      </nav>
+    </header>
+
+    <div class="login-section">
+      <div class="left">
+        <h1>CREATE ACCOUNT</h1>
+        <p>Join CourseCrate today<br>and start your learning journey!</p>
+
+        <button class="google-btn">
+          <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google">
+          Sign Up with Google
+        </button>
+
+        <p class="signup-text">Already have an account? <a href="index.html">Login</a></p>
+      </div>
+
+      <div class="right glass">
+        <form id="registerForm">
+          <label for="fullname">Full Name</label>
+          <input type="text" id="fullname" placeholder="Enter your full name" required>
+
+          <label for="email">E-Mail</label>
+          <input type="email" id="email" placeholder="E.g. coursecrates@gmail.com" required>
+
+          <label for="password">Password</label>
+          <input type="password" id="password" placeholder="Enter a strong password" required>
+
+          <label for="confirmPassword">Confirm Password</label>
+          <input type="password" id="confirmPassword" placeholder="Re-enter your password" required>
+
+          <button type="submit" class="login-btn">SIGN UP</button>
+        </form>
+      </div>
+    </div>
+
+    <footer>© Copyright 2023</footer>
+  </div>
+
+<script src="script.js"></script>
+
+<script>
+// Simulated registration process
+document.querySelector("form").addEventListener("submit", function(e) {
+  e.preventDefault();
+
+  const name = document.querySelector('input[name="name"]').value;
+  const email = document.querySelector('input[name="email"]').value;
+  const password = document.querySelector('input[name="password"]').value;
+
+  if (name.trim() === "" || email.trim() === "" || password.trim() === "") {
+    alert("Please fill in all fields!");
+    return;
+  }
+
+  // Save user info to localStorage (persistent)
+  const newUser = { name, email, password };
+  localStorage.setItem("registeredUser", JSON.stringify(newUser));
+
+  // Also save session info for this login
+  sessionStorage.setItem("loggedInUser", JSON.stringify(newUser));
+
+  // Redirect to dashboard
+  window.location.href = "dashboard.html";
+});
+</script>
+
+</body>
+</html>

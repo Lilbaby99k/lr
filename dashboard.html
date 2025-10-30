@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CourseCrate — Dashboard</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <div class="logo">CourseCrate</div>
+      <nav>
+        <a href="#">Home</a>
+        <a href="#">Features</a>
+        <a href="#" id="logout">Logout</a>
+      </nav>
+    </header>
+
+    <div class="login-section" style="justify-content:center;">
+      <div class="right glass" style="width:70%;text-align:center;padding:60px;">
+        <h1>Welcome, <span id="user-name"></span> 🎉</h1>
+        <p>You're now logged into your CourseCrate dashboard!</p>
+
+        <div style="margin-top:40px;">
+          <a href="#" class="login-btn" id="logoutBtn" style="text-decoration:none;">Logout</a>
+        </div>
+      </div>
+    </div>
+
+    <footer>© Copyright 2023</footer>
+  </div>
+
+<script>
+// Load user info
+document.addEventListener('DOMContentLoaded', () => {
+  const user = JSON.parse(sessionStorage.getItem('loggedInUser'));
+  if (!user) {
+    // If no logged user, redirect to login
+    window.location.href = 'index.html';
+    return;
+  }
+
+  document.getElementById('user-name').textContent = user.name;
+
+  // Logout event
+  document.getElementById('logoutBtn').addEventListener('click', () => {
+    sessionStorage.removeItem('loggedInUser');
+    window.location.href = 'index.html';
+  });
+});
+</script>
+</body>
+</html>
