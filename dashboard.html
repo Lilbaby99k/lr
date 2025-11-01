@@ -1,143 +1,209 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>GoMeal Dashboard</title>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>GoMeal — Dashboard</title>
+
+  <!-- Font Awesome -->
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="dashboard.css">
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div class="dashboard">
-    <!-- Sidebar -->
-    <aside class="sidebar">
-      <div class="logo">GoMeal<span>.</span></div>
-      <ul class="menu">
-        <li class="active">🏠 Dashboard</li>
-        <li>🍔 Food Order</li>
-        <li>❤️ Favorite</li>
-        <li>💬 Message</li>
-        <li>📜 Order History</li>
-        <li>💳 Bills</li>
-        <li>⚙️ Setting</li>
-      </ul>
-      <div class="upgrade-card">
-        <p>Upgrade your Account to Get Free Voucher</p>
-        <button>Upgrade</button>
+  <div class="app" id="app">
+    <!-- Top bar (mobile) -->
+    <header class="topbar">
+      <button id="burger" class="burger" aria-label="Toggle menu"><i class="fa fa-bars"></i></button>
+      <div class="brand">GoMeal<span class="brand-dot">.</span></div>
+
+      <div class="top-search">
+        <input type="search" placeholder="What do you want to eat today?" aria-label="Search">
       </div>
-    </aside>
 
-    <!-- Main Content -->
-    <main class="main">
-      <!-- Top Bar -->
-      <header class="topbar">
-        <h2>Hello, Patricia 👋</h2>
-        <div class="search">
-          <input type="text" placeholder="What do you want to eat today?">
-        </div>
-        <div class="top-icons">
-          <span>🔔</span>
-          <span>⚙️</span>
-          <img src="https://i.pravatar.cc/40" alt="user">
-        </div>
-      </header>
+      <div class="top-actions">
+        <button id="darkToggle" class="icon-btn" aria-label="Toggle dark mode" title="Toggle theme">
+          <i class="fa-regular fa-moon"></i>
+        </button>
+        <button class="icon-btn" aria-label="Notifications"><i class="fa-regular fa-bell"></i></button>
+        <img class="avatar" src="https://i.pravatar.cc/40" alt="User avatar">
+      </div>
+    </header>
 
-      <!-- Banner -->
-      <section class="banner">
-        <div class="banner-text">
-          <h3>Get Discount Voucher Up To 20%</h3>
-          <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-        </div>
-        <img src="https://images.unsplash.com/photo-1600891963937-c9b6feaa8b01?w=400" alt="Food">
-      </section>
+    <div class="layout">
+      <!-- Sidebar -->
+      <aside class="sidebar" id="sidebar" aria-label="Sidebar">
+        <div class="sidebar-top">
+          <div class="logo">GoMeal<span class="brand-dot">.</span></div>
 
-      <!-- Categories -->
-      <section class="categories">
-        <div class="section-header">
-          <h3>Category</h3>
-          <a href="#">View all →</a>
+          <nav class="nav">
+            <button class="nav-item active"><i class="fa-solid fa-house"></i><span>Dashboard</span></button>
+            <button class="nav-item"><i class="fa-solid fa-burger"></i><span>Food Order</span></button>
+            <button class="nav-item"><i class="fa-solid fa-heart"></i><span>Favorite</span></button>
+            <button class="nav-item"><i class="fa-solid fa-message"></i><span>Message</span></button>
+            <button class="nav-item"><i class="fa-solid fa-clock-rotate-left"></i><span>Order History</span></button>
+            <button class="nav-item"><i class="fa-solid fa-file-invoice-dollar"></i><span>Bills</span></button>
+            <button class="nav-item"><i class="fa-solid fa-gear"></i><span>Setting</span></button>
+          </nav>
         </div>
-        <div class="category-list">
-          <div class="cat">🥐 Bakery</div>
-          <div class="cat">🍔 Burger</div>
-          <div class="cat">🥤 Beverage</div>
-          <div class="cat">🍗 Chicken</div>
-          <div class="cat">🍕 Pizza</div>
-          <div class="cat">🐟 Seafood</div>
-        </div>
-      </section>
 
-      <!-- Popular Dishes -->
-      <section class="popular">
-        <div class="section-header">
-          <h3>Popular Dishes</h3>
-          <a href="#">View all →</a>
-        </div>
-        <div class="dish-list">
-          <div class="dish">
-            <span class="tag">15% Off</span>
-            <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=400" alt="">
-            <h4>Fish Burger</h4>
-            <p>$5.59</p>
-          </div>
-          <div class="dish">
-            <span class="tag">15% Off</span>
-            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=400" alt="">
-            <h4>Beef Burger</h4>
-            <p>$5.59</p>
-          </div>
-          <div class="dish">
-            <span class="tag">15% Off</span>
-            <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=400" alt="">
-            <h4>Cheese Burger</h4>
-            <p>$5.59</p>
+        <div class="sidebar-bottom">
+          <div class="upgrade">
+            <p><strong>Upgrade your Account</strong><br>to Get Free Voucher</p>
+            <button class="btn btn-primary">Upgrade</button>
           </div>
         </div>
-      </section>
+      </aside>
 
-      <!-- Recent Orders -->
-      <section class="recent">
-        <div class="section-header">
-          <h3>Recent Order</h3>
-          <a href="#">View all →</a>
+      <!-- Main content -->
+      <main class="main">
+        <section class="hero">
+          <div class="hero-left">
+            <h1>Hello, <span id="userName">Patricia</span></h1>
+          </div>
+
+          <div class="hero-right">
+            <!-- small search duplicated here for larger screens -->
+            <div class="search-wrap">
+              <input type="search" placeholder="What do you want to eat today?" aria-label="Search large">
+            </div>
+          </div>
+        </section>
+
+        <section class="banner">
+          <div class="banner-content">
+            <h2>Get Discount Voucher Up To 20%</h2>
+            <p>Upgrade now and enjoy extra benefits on your next course!</p>
+          </div>
+          <div class="banner-img">
+            <img src="https://images.unsplash.com/photo-1524182576060-9d6fefb0c7a5?w=800&q=60&auto=format&fit=crop" alt="Offer">
+          </div>
+        </section>
+
+        <section class="categories">
+          <div class="section-head">
+            <h3>Category</h3>
+            <a class="view-all" href="#">View all</a>
+          </div>
+
+          <div class="cats">
+            <div class="cat"><i class="fa-solid fa-croissant"></i><span>Bakery</span></div>
+            <div class="cat"><i class="fa-solid fa-burger"></i><span>Burger</span></div>
+            <div class="cat"><i class="fa-solid fa-glass-water"></i><span>Beverage</span></div>
+            <div class="cat"><i class="fa-solid fa-drumstick-bite"></i><span>Chicken</span></div>
+            <div class="cat"><i class="fa-solid fa-pizza-slice"></i><span>Pizza</span></div>
+            <div class="cat"><i class="fa-solid fa-fish"></i><span>Seafood</span></div>
+          </div>
+        </section>
+
+        <section class="popular">
+          <div class="section-head">
+            <h3>Popular Dishes</h3>
+            <a class="view-all" href="#">View all</a>
+          </div>
+
+          <div class="popular-grid">
+            <!-- card 1 -->
+            <article class="card">
+              <span class="badge">15% Off</span>
+              <img src="https://images.unsplash.com/photo-1550547660-d9450f859349?w=800&q=60&auto=format&fit=crop" alt="">
+              <div class="card-body">
+                <h4>Fish Burger</h4>
+                <div class="card-meta">
+                  <div class="rating">★★★★★</div>
+                  <div class="price">$5.59</div>
+                </div>
+              </div>
+            </article>
+
+            <!-- card 2 -->
+            <article class="card">
+              <span class="badge">15% Off</span>
+              <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=60&auto=format&fit=crop" alt="">
+              <div class="card-body">
+                <h4>Beef Burger</h4>
+                <div class="card-meta">
+                  <div class="rating">★★★★★</div>
+                  <div class="price">$5.59</div>
+                </div>
+              </div>
+            </article>
+
+            <!-- card 3 -->
+            <article class="card">
+              <span class="badge">15% Off</span>
+              <img src="https://images.unsplash.com/photo-1551782450-a2132b4ba21d?w=800&q=60&auto=format&fit=crop" alt="">
+              <div class="card-body">
+                <h4>Cheese Burger</h4>
+                <div class="card-meta">
+                  <div class="rating">★★★★★</div>
+                  <div class="price">$5.59</div>
+                </div>
+              </div>
+            </article>
+          </div>
+        </section>
+
+        <section class="recent">
+          <div class="section-head">
+            <h3>Recent Order</h3>
+            <a class="view-all" href="#">View all</a>
+          </div>
+
+          <div class="recent-grid">
+            <img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=800&q=60&auto=format&fit=crop" alt="">
+            <img src="https://images.unsplash.com/photo-1605470207062-1c8f3a83e0ec?w=800&q=60&auto=format&fit=crop" alt="">
+            <img src="https://images.unsplash.com/photo-1601924582971-030a3812d0d1?w=800&q=60&auto=format&fit=crop" alt="">
+          </div>
+        </section>
+      </main>
+
+      <!-- Right panel -->
+      <aside class="rightpanel" id="rightpanel" aria-label="Order summary">
+        <div class="balance-panel">
+          <div class="balance-head">
+            <h4>Your Balance</h4>
+            <div class="amount">$12.00</div>
+          </div>
+          <div class="balance-actions">
+            <button class="btn small">Top-up</button>
+            <button class="btn small outline">Transfer</button>
+          </div>
         </div>
-        <div class="order-list">
-          <img src="https://images.unsplash.com/photo-1594007654729-407eedc4be65?w=400" alt="">
-          <img src="https://images.unsplash.com/photo-1605470207062-1c8f3a83e0ec?w=400" alt="">
-          <img src="https://images.unsplash.com/photo-1601924582971-030a3812d0d1?w=400" alt="">
+
+        <div class="address-panel card">
+          <div class="panel-head"><h4>Your Address</h4></div>
+          <p class="address-text">Elm Street, 23</p>
+          <div class="address-actions">
+            <button class="btn tiny">Add Details</button>
+            <button class="btn tiny outline">Add Note</button>
+          </div>
         </div>
-      </section>
-    </main>
 
-    <!-- Right Panel -->
-    <aside class="right-panel">
-      <div class="balance-card">
-        <h4>Your Balance</h4>
-        <div class="balance">$12.00</div>
-        <div class="balance-actions">
-          <button>Top-up</button>
-          <button>Transfer</button>
+        <div class="order-panel card">
+          <h4>Order Menu</h4>
+          <ul class="order-list">
+            <li>🍕 Pepperoni Pizza <span>$5.59</span></li>
+            <li>🍔 Cheese Burger <span>$5.59</span></li>
+            <li>🥦 Vegan Pizza <span>$5.59</span></li>
+          </ul>
+
+          <div class="totals">
+            <div class="row"><span>Service</span><strong>$1.00</strong></div>
+            <div class="row big"><span>Total</span><strong>$202.00</strong></div>
+          </div>
+
+          <div class="coupon">
+            <input type="text" placeholder="Have a coupon code?">
+            <button class="btn small">Apply</button>
+          </div>
+
+          <button class="btn checkout">Checkout</button>
         </div>
-      </div>
-
-      <div class="address">
-        <h4>Your Address</h4>
-        <p>Elm Street, 23</p>
-        <button>Change</button>
-      </div>
-
-      <div class="order-summary">
-        <h4>Order Menu</h4>
-        <ul>
-          <li>🍕 Pepperoni Pizza — $5.59</li>
-          <li>🍔 Cheese Burger — $5.59</li>
-          <li>🥦 Vegan Pizza — $5.59</li>
-        </ul>
-        <p>Service: $1.00</p>
-        <h3>Total: $202.00</h3>
-        <button class="checkout">Checkout</button>
-      </div>
-    </aside>
+      </aside>
+    </div>
   </div>
+
+  <script src="dashboard.js"></script>
 </body>
 </html>
