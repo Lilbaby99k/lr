@@ -24,6 +24,43 @@
       --gap: 14px;
       --transition: 220ms ease;
     }
+    /* Ensure sidebar slides above everything else */
+.sidebar {
+  z-index: 4000 !important;
+}
+
+/* Ensure burger button always visible and clickable */
+#burger {
+  position: relative;
+  z-index: 5000;
+  background: var(--green);
+  color: #fff;
+  padding: 8px 10px;
+  border-radius: 8px;
+}
+
+/* Make sure overlay shows behind sidebar but above content */
+.screen-overlay {
+  z-index: 3500 !important;
+  cursor: pointer;
+}
+
+/* Optional: hide sidebar automatically when width > 900px (desktop view) */
+@media (min-width: 900px) {
+  .sidebar {
+    transform: none !important;
+    position: relative;
+    width: var(--sidebar-w);
+    z-index: 1;
+  }
+  #burger {
+    display: none;
+  }
+  .screen-overlay {
+    display: none !important;
+  }
+}
+
 
     *{box-sizing:border-box}
     html,body{height:100%}
