@@ -9,9 +9,9 @@
   <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
 
   <style>
-    /* ---------- Colors & base ---------- */
+    /* ---------- Colors & base (mobile-first) ---------- */
     :root{
-      --green: #2aa65b;        /* sidebar */
+      --green: #2aa65b;
       --green-dark: #238a4a;
       --muted: #6b7280;
       --card-bg: #ffffff;
@@ -20,8 +20,13 @@
       --shadow: rgba(16,24,40,0.06);
       --radius: 12px;
       --max-width: 1200px;
+      --sidebar-w: 260px;
+      --gap: 14px;
+      --transition: 220ms ease;
     }
+
     *{box-sizing:border-box}
+    html,body{height:100%}
     body{
       margin:0;
       font-family: "Poppins", Inter, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
@@ -29,62 +34,112 @@
       color:#0f1724;
       -webkit-font-smoothing:antialiased;
       -moz-osx-font-smoothing:grayscale;
+      transition: background var(--transition), color var(--transition);
     }
-    .container{max-width:var(--max-width);margin:18px auto;padding:16px}
+
+    /* container */
+    .container{max-width:var(--max-width);margin:16px auto;padding:12px}
 
     /* ---------- Top bar ---------- */
     .topbar{
       display:flex;align-items:center;gap:12px;padding:12px;border-radius:10px;
-      background:linear-gradient(180deg, rgba(255,255,255,0.95), rgba(255,255,255,0.9));
+      background:linear-gradient(180deg, rgba(255,255,255,0.98), rgba(255,255,255,0.95));
       box-shadow:0 6px 18px var(--shadow);
+      position:relative; z-index: 2000;
     }
     .brand{font-weight:800;font-size:18px;color:var(--green-dark)}
-    .top-search input{padding:10px 14px;border-radius:10px;border:1px solid rgba(15,23,36,0.06);width:280px}
+    .top-search input{
+      padding:8px 12px;border-radius:10px;border:1px solid rgba(15,23,36,0.06);width:180px;
+    }
     .top-actions{margin-left:auto;display:flex;gap:10px;align-items:center}
-    .icon-btn{background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--muted)}
+    .icon-btn{background:transparent;border:none;cursor:pointer;font-size:16px;color:var(--muted);padding:6px;border-radius:8px}
+    .icon-btn:focus{outline:2px solid rgba(0,0,0,0.08)}
 
     .profile-wrapper{display:flex;align-items:center;gap:8px;position:relative}
-    .avatar{width:44px;height:44px;border-radius:10px;object-fit:cover;border:2px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.06)}
-    .small-ic{font-size:14px;color:var(--muted)}
+    .avatar{width:40px;height:40px;border-radius:8px;object-fit:cover;border:2px solid #fff;box-shadow:0 4px 12px rgba(0,0,0,0.06)}
 
-    /* ---------- Layout (desktop) ---------- */
-    .layout{display:grid;grid-template-columns:260px 1fr 320px;gap:18px;margin-top:18px;align-items:start}
-    .sidebar{background:var(--green);color:#fff;border-radius:14px;padding:18px;height:calc(100vh - 120px);position:sticky;top:18px;box-shadow:0 8px 30px rgba(0,0,0,0.08)}
+    /* ---------- Layout ---------- */
+    .app-grid{
+      display:grid;
+      grid-template-columns: 1fr;
+      gap: var(--gap);
+      margin-top:12px;
+      align-items:start;
+    }
+
+    /* Sidebar (hidden by default) */
+    .sidebar{
+      position:fixed;
+      left:0;
+      top:0;
+      bottom:0;
+      width:var(--sidebar-w);
+      transform: translateX(-120%);
+      background:var(--green);
+      color:#fff;
+      padding:18px;
+      border-radius:0 12px 12px 0;
+      box-shadow:0 12px 40px rgba(0,0,0,0.12);
+      transition: transform var(--transition);
+      z-index:3000;
+      overflow:auto;
+    }
+    .sidebar.open{ transform: translateX(0); }
     .sidebar .profile{display:flex;gap:12px;align-items:center;margin-bottom:18px}
     .sidebar .profile .name{font-weight:700}
-    .sidebar .nav{display:flex;flex-direction:column;gap:8px;margin-top:12px}
+    .nav{display:flex;flex-direction:column;gap:8px;margin-top:12px}
     .nav-item{background:transparent;color:#eaf8ee;border:none;text-align:left;padding:10px 12px;border-radius:10px;cursor:pointer;display:flex;gap:10px;align-items:center}
     .nav-item.active{background:rgba(255,255,255,0.12);font-weight:700}
     .start-order{margin-top:14px;background:#fff;color:var(--green);padding:10px;border-radius:10px;border:none;cursor:pointer;width:100%;font-weight:700;box-shadow:0 6px 20px rgba(0,0,0,0.06)}
 
-    /* ---------- Center (white card) ---------- */
-    .main-card{background:var(--card-bg);border-radius:14px;padding:18px;box-shadow:0 8px 24px var(--shadow)}
+    /* Main content */
+    main.main-card{
+      background:var(--card-bg);
+      border-radius:12px;
+      padding:16px;
+      box-shadow:0 8px 24px var(--shadow);
+      min-height:60vh;
+      transition: background var(--transition), color var(--transition);
+    }
+
     .hero{display:flex;align-items:center;gap:12px;justify-content:space-between}
-    .hero h2{margin:0;font-size:20px}
-    .search-large{display:flex;gap:8px}
-    .search-large input{padding:10px 14px;border-radius:10px;border:1px solid rgba(15,23,36,0.06);width:420px}
+    .hero h2{margin:0;font-size:18px}
+    .search-large input{padding:10px 14px;border-radius:10px;border:1px solid rgba(15,23,36,0.06);width:100%;max-width:520px}
 
-    /* categories row - small cards */
-    .category-row{display:flex;gap:10px;overflow:auto;padding:12px 0}
+    /* categories row */
+    .category-row{display:flex;gap:10px;overflow:auto;padding:12px 0;margin-top:8px}
     .category-pill{background:#fff;border-radius:10px;padding:10px 14px;box-shadow:0 8px 18px rgba(16,24,40,0.04);min-width:110px;display:flex;gap:10px;align-items:center;cursor:pointer}
-    .category-pill .icon{width:44px;height:44px;border-radius:8px;background:linear-gradient(180deg, rgba(0,0,0,0.03), rgba(0,0,0,0.01));display:flex;align-items:center;justify-content:center;font-size:20px;color:var(--green-dark)}
+    .category-pill .icon{width:44px;height:44px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:18px}
 
-    /* cards grid (meals) */
-    .meals-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px;margin-top:12px}
-    .meal-card{background:#fff;border-radius:12px;padding:12px;box-shadow:0 8px 24px rgba(16,24,40,0.04);display:flex;flex-direction:column;gap:8px}
-    .meal-card img{width:100%;height:140px;object-fit:cover;border-radius:8px}
+    /* cards grid */
+    .meals-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:12px}
+    .meal-card{background:#fff;border-radius:10px;padding:10px;box-shadow:0 8px 24px rgba(16,24,40,0.04);display:flex;flex-direction:column;gap:8px}
+    .meal-card img{width:100%;height:120px;object-fit:cover;border-radius:8px}
     .meal-meta{display:flex;justify-content:space-between;align-items:center}
     .price{font-weight:700;color:var(--green-dark)}
     .add-small{background:var(--green);color:#fff;border:none;padding:8px 12px;border-radius:8px;cursor:pointer}
 
-    /* favorite restaurants / top meals section */
-    .section-title{display:flex;justify-content:space-between;align-items:center;margin-top:18px}
-    .cards-row{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;margin-top:10px}
+    /* favorites */
+    .cards-row{display:grid;grid-template-columns:1fr;gap:12px;margin-top:10px}
 
-    /* ---------- Right panel (My Order) ---------- */
-    .rightpanel{background:#fff;border-radius:14px;padding:14px;box-shadow:0 8px 24px rgba(16,24,40,0.04);height:fit-content;display:flex;flex-direction:column;gap:12px}
+    /* rightpanel (order) - hidden by default */
+    .rightpanel{
+      position:fixed;
+      right:0;
+      top:0;
+      bottom:0;
+      width:320px;
+      transform: translateX(120%);
+      background:#fff;
+      padding:14px;
+      box-shadow:0 12px 40px rgba(0,0,0,0.12);
+      transition: transform var(--transition);
+      z-index:3000;
+      overflow:auto;
+    }
+    .rightpanel.open{ transform: translateX(0); }
     .order-header{display:flex;justify-content:space-between;align-items:center}
-    .order-list{list-style:none;padding:0;margin:0;display:flex;flex-direction:column;gap:10px;max-height:360px;overflow:auto}
+    .order-list{list-style:none;padding:0;margin:10px 0;display:flex;flex-direction:column;gap:10px;max-height:55vh;overflow:auto}
     .order-item{display:flex;gap:10px;align-items:center;border-radius:10px;padding:8px;background:#f5faf3}
     .order-item img{width:56px;height:56px;border-radius:8px;object-fit:cover}
     .item-meta{flex:1}
@@ -93,215 +148,196 @@
     .totals{border-top:1px solid rgba(15,23,36,0.04);padding-top:10px}
     .checkout-btn{background:var(--green);color:#fff;border:none;padding:12px;border-radius:10px;cursor:pointer;width:100%;font-weight:700}
 
-    /* ---------- Modal (checkout receipt) ---------- */
-    .modal-backdrop{position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:4000}
+    /* modal */
+    .modal-backdrop{
+      position:fixed;inset:0;background:rgba(0,0,0,0.45);display:none;align-items:center;justify-content:center;z-index:4000;padding:16px;
+    }
     .modal-backdrop.show{display:flex}
-    .modal{background:#fff;border-radius:12px;padding:18px;width:96%;max-width:720px;box-shadow:0 12px 40px rgba(16,24,40,0.2)}
+    .modal{background:#fff;border-radius:12px;padding:16px;width:100%;max-width:720px;box-shadow:0 12px 40px rgba(16,24,40,0.2)}
     .modal .modal-items{max-height:320px;overflow:auto;margin-top:10px}
     .modal .modal-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px dashed #eee}
 
-    /* ---------- Responsive adjustments ---------- */
-    @media (max-width:1100px){
-      .meals-grid{grid-template-columns:repeat(2,1fr)}
-      .layout{grid-template-columns:220px 1fr 300px}
+    /* overlay for accessibility when panels open */
+    .screen-overlay{
+      position:fixed;inset:0;background:rgba(0,0,0,0.35);display:none;z-index:2500;
     }
-    @media (max-width:860px){
-      .meals-grid{grid-template-columns:1fr}
-      .cards-row{grid-template-columns:1fr}
-      .layout{grid-template-columns:1fr;gap:12px}
-      .sidebar{position:fixed;left:0;top:0;bottom:0;width:260px;transform:translateX(-120%);z-index:3000;transition:transform .22s ease}
-      .sidebar.open{transform:translateX(0)}
-      .layout .rightpanel{order:3}
+    .screen-overlay.show{display:block;}
+
+    /* ---------- Responsive tweaks ---------- */
+    @media (min-width: 900px){
+      .app-grid{ grid-template-columns: 1fr; } /* keep single column but allow sidebar/rightpanel overlays */
+      .meals-grid{ grid-template-columns: repeat(3, 1fr); }
+      .cards-row{ grid-template-columns: repeat(2, 1fr); }
     }
-    @media (max-width:520px){
-      .top-search input{width:140px}
-      .search-large input{width:160px}
-      .profile-wrapper .avatar{width:36px;height:36px}
+
+    @media (min-width: 1200px){
+      .meals-grid{ grid-template-columns: repeat(3, 1fr); }
+    }
+
+    @media (max-width:640px){
+      .meals-grid{ grid-template-columns: 1fr; }
+      .top-search input{width:120px}
+      .avatar{width:36px;height:36px}
     }
 
     /* ----------------------------------------------
-   Dark Mode Styles (GoMeal dark palette)
------------------------------------------------ */
-body.dark {
-  background: #121212;
-  color: #f5f5f5;
-}
-body.dark .topbar {
-  background: linear-gradient(180deg, rgba(30,30,30,0.95), rgba(30,30,30,0.9));
-}
-body.dark .sidebar {
-  background: #1f3b28;
-}
-body.dark .main-card,
-body.dark .rightpanel,
-body.dark .meal-card,
-body.dark .category-pill,
-body.dark .modal {
-  background: #1e1e1e;
-  color: #eaeaea;
-  box-shadow: 0 8px 20px rgba(0,0,0,0.4);
-}
-body.dark input,
-body.dark button {
-  color: #f1f1f1;
-  background-color: #2a2a2a;
-  border-color: rgba(255,255,255,0.08);
-}
-body.dark .add-small,
-body.dark .checkout-btn {
-  background: var(--green);
-  color: #fff;
-}
-body.dark .nav-item.active {
-  background: rgba(255,255,255,0.1);
-}
-body.dark .muted,
-body.dark [style*="color:var(--muted)"] {
-  color: #ccc !important;
-}
+       Dark Mode Styles (keeps GoMeal palette)
+    ----------------------------------------------- */
+    body.dark {
+      background: #0b0b0b;
+      color: #eaeaea;
+    }
+    body.dark .topbar { background: linear-gradient(180deg, rgba(18,18,18,0.95), rgba(18,18,18,0.9)); box-shadow: none; }
+    body.dark .main-card, body.dark .rightpanel, body.dark .meal-card, body.dark .category-pill, body.dark .modal {
+      background: #151515; color: #eaeaea; box-shadow: 0 8px 20px rgba(0,0,0,0.5);
+    }
+    body.dark .sidebar { background: #1b3b29; }
+    body.dark input, body.dark button { color: #f1f1f1; background-color: #222; border-color: rgba(255,255,255,0.06); }
+    body.dark .add-small, body.dark .checkout-btn { background: var(--green); color:#fff; }
+    body.dark .nav-item.active { background: rgba(255,255,255,0.06); }
+    body.dark .muted, body.dark [style*="color:var(--muted)"] { color: #bfc3c7 !important; }
 
+    /* small helpers */
+    .sr-only { position:absolute; left:-9999px; top:auto; width:1px; height:1px; overflow:hidden; }
   </style>
 </head>
 <body>
   <div class="container">
 
     <!-- Top bar -->
-    <header class="topbar">
-      <button id="burger" class="icon-btn" aria-label="Toggle menu"><i class="fa fa-bars"></i></button>
-      <div class="brand">GoMeal<span>.</span></div>
+    <header class="topbar" role="banner">
+      <button id="burger" class="icon-btn" aria-label="Toggle menu" title="Menu"><i class="fa fa-bars" aria-hidden="true"></i></button>
+      <div class="brand">GoMeal<span class="sr-only">.</span></div>
 
-      <div class="top-search">
-        <input type="search" placeholder="What do you want to eat today?" aria-label="Search">
+      <div class="top-search" role="search">
+        <label for="q" class="sr-only">Search</label>
+        <input id="q" type="search" placeholder="What do you want to eat today?" aria-label="Search">
       </div>
 
-      <div class="top-actions">
-        <button id="darkToggle" class="icon-btn" aria-label="Toggle theme" title="Toggle theme">
-          <i class="fa-regular fa-moon"></i>
+      <div class="top-actions" role="toolbar" aria-label="Top actions">
+        <button id="darkToggle" class="icon-btn" aria-pressed="false" aria-label="Toggle theme" title="Toggle theme">
+          <i class="fa-regular fa-moon" aria-hidden="true"></i>
         </button>
-        <button class="icon-btn" aria-label="Notifications"><i class="fa-regular fa-bell"></i></button>
+        <button class="icon-btn" aria-label="Notifications" title="Notifications"><i class="fa-regular fa-bell"></i></button>
 
         <div class="profile-wrapper">
-          <img id="userAvatar" class="avatar" src="https://i.pravatar.cc/40" alt="avatar">
-          <button id="changePicBtn" class="icon-btn" title="Change picture"><i class="fa-solid fa-camera"></i></button>
+          <img id="userAvatar" class="avatar" src="https://i.pravatar.cc/40" alt="User avatar">
+          <button id="changePicBtn" class="icon-btn" title="Change picture"><i class="fa-solid fa-camera" aria-hidden="true"></i></button>
           <input id="uploadPic" type="file" accept="image/*" style="display:none">
         </div>
       </div>
     </header>
 
-    <!-- Main layout -->
-    <div class="layout">
+    <!-- overlay for panels -->
+    <div id="screenOverlay" class="screen-overlay" tabindex="-1" aria-hidden="true"></div>
 
-      <!-- Sidebar -->
-      <aside class="sidebar" id="sidebar" aria-label="Sidebar">
-        <div class="profile">
-          <img id="sidebarAvatar" src="https://i.pravatar.cc/56" alt="user" style="width:56px;height:56px;border-radius:10px;object-fit:cover">
+    <!-- Sidebar (auto-hidden by default) -->
+    <aside id="sidebar" class="sidebar" aria-label="Sidebar">
+      <div class="profile" role="region" aria-label="User">
+        <img id="sidebarAvatar" src="https://i.pravatar.cc/56" alt="user avatar" style="width:56px;height:56px;border-radius:10px;object-fit:cover">
+        <div>
+          <div style="font-weight:800" id="sidebarName">Hello, Guest</div>
+          <div style="font-size:13px;color:rgba(255,255,255,0.9)">Welcome back</div>
+        </div>
+      </div>
+
+      <nav class="nav" aria-label="Main navigation">
+        <button class="nav-item active" type="button"><i class="fa-solid fa-house"></i> Dashboard</button>
+        <button class="nav-item" type="button"><i class="fa-solid fa-list"></i> Orders</button>
+        <button class="nav-item" type="button"><i class="fa-solid fa-utensils"></i> Restaurants</button>
+        <button class="nav-item" type="button"><i class="fa-solid fa-wallet"></i> Finance</button>
+        <button class="nav-item" id="logoutBtn" type="button"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+      </nav>
+
+      <button class="start-order" id="startOrderBtn">Start new order</button>
+    </aside>
+
+    <!-- Main content -->
+    <main class="main-card" id="main" role="main">
+      <div class="hero">
+        <h2>Hello, <span id="userName">Guest</span> 👋</h2>
+        <div class="search-large" aria-hidden="false">
+          <input type="search" placeholder="Search dishes, restaurants..." aria-label="Large search">
+        </div>
+      </div>
+
+      <div class="category-row" id="categoryRow" aria-hidden="false">
+        <div class="category-pill" data-category="burgers"><div class="icon">🍔</div><div><strong>Burger</strong><div style="font-size:12px;color:var(--muted)">12 restaurants</div></div></div>
+        <div class="category-pill" data-category="pizza"><div class="icon">🍕</div><div><strong>Pizza</strong><div style="font-size:12px;color:var(--muted)">9 restaurants</div></div></div>
+        <div class="category-pill" data-category="salads"><div class="icon">🥗</div><div><strong>Salads</strong><div style="font-size:12px;color:var(--muted)">7 restaurants</div></div></div>
+        <div class="category-pill" data-category="cakes"><div class="icon">🍰</div><div><strong>Cakes</strong><div style="font-size:12px;color:var(--muted)">5 restaurants</div></div></div>
+      </div>
+
+      <div class="section-title" style="margin-top:10px;display:flex;justify-content:space-between;align-items:center">
+        <h3 style="margin:0">Top meals this week</h3>
+        <a href="#" style="color:var(--muted);font-size:14px">View all →</a>
+      </div>
+
+      <div class="meals-grid" id="mealsGrid" aria-live="polite">
+        <div class="meal-card food-card" data-category="burgers">
+          <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=60" alt="Original Burger">
+          <div><strong class="meal-title">Original Burger</strong></div>
+          <div class="meal-meta"><div class="price">$4.92</div><button class="add-small" type="button">Add</button></div>
+        </div>
+
+        <div class="meal-card food-card" data-category="burgers">
+          <img src="https://images.unsplash.com/photo-1605470207062-1c8f3a83e0ec?w=800&q=60" alt="Special Burger">
+          <div><strong class="meal-title">Special Burger</strong></div>
+          <div class="meal-meta"><div class="price">$5.59</div><button class="add-small" type="button">Add</button></div>
+        </div>
+
+        <div class="meal-card food-card" data-category="pizza">
+          <img src="https://images.unsplash.com/photo-1548365328-8d0b321419b9?w=800&q=60" alt="Pepperoni Pizza">
+          <div><strong class="meal-title">Pepperoni Pizza</strong></div>
+          <div class="meal-meta"><div class="price">$8.99</div><button class="add-small" type="button">Add</button></div>
+        </div>
+      </div>
+
+      <div class="section-title" style="margin-top:18px">
+        <h3 style="margin:0">Your favourite restaurants</h3>
+        <a href="#" style="color:var(--muted);font-size:14px">View all →</a>
+      </div>
+
+      <div class="cards-row" style="margin-top:10px">
+        <div style="background:#fff;border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center">
+          <img src="https://images.unsplash.com/photo-1524182576060-9d6fefb0c7a5?w=800&q=60" style="width:120px;height:84px;object-fit:cover;border-radius:8px" alt="">
           <div>
-            <div style="font-weight:800" id="sidebarName">Hello, Guest</div>
-            <div style="font-size:13px;color:rgba(255,255,255,0.9)">2 hrs until lunch</div>
+            <strong>Best Restaurant</strong>
+            <div style="font-size:13px;color:var(--muted)">4.9 • 200 reviews</div>
           </div>
         </div>
 
-        <nav class="nav" aria-label="Main">
-          <button class="nav-item active"><i class="fa-solid fa-house"></i> Dashboard</button>
-          <button class="nav-item"><i class="fa-solid fa-list"></i> Orders</button>
-          <button class="nav-item"><i class="fa-solid fa-utensils"></i> Restaurants</button>
-          <button class="nav-item"><i class="fa-solid fa-wallet"></i> Finance</button>
-          <button class="nav-item"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
-        </nav>
-
-        <button class="start-order">Start new order</button>
-      </aside>
-
-      <!-- Center white main -->
-      <main class="main-card">
-
-        <div class="hero">
-          <h2>Hello, <span id="userName">Guest</span> 👋</h2>
-          <div class="search-large">
-            <input type="search" placeholder="Search dishes, restaurants..." aria-label="Large search">
+        <div style="background:#fff;border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center">
+          <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=60" style="width:120px;height:84px;object-fit:cover;border-radius:8px" alt="">
+          <div>
+            <strong>Great Eats</strong>
+            <div style="font-size:13px;color:var(--muted)">4.8 • 150 reviews</div>
           </div>
         </div>
+      </div>
+    </main>
 
-        <!-- category pills -->
-        <div class="category-row" id="categoryRow">
-          <div class="category-pill"><div class="icon">🍔</div><div><strong>Burger</strong><div style="font-size:12px;color:var(--muted)">12 restaurants</div></div></div>
-          <div class="category-pill"><div class="icon">🍕</div><div><strong>Pizza</strong><div style="font-size:12px;color:var(--muted)">9 restaurants</div></div></div>
-          <div class="category-pill"><div class="icon">🥗</div><div><strong>Salads</strong><div style="font-size:12px;color:var(--muted)">7 restaurants</div></div></div>
-          <div class="category-pill"><div class="icon">🍰</div><div><strong>Cakes</strong><div style="font-size:12px;color:var(--muted)">5 restaurants</div></div></div>
-        </div>
+    <!-- Right panel (order) -->
+    <aside id="rightpanel" class="rightpanel" aria-label="My order" aria-hidden="true">
+      <div class="order-header">
+        <div><strong>My Order</strong><div style="font-size:13px;color:var(--muted)">Take out</div></div>
+        <button id="closeOrderPanel" class="icon-btn" aria-label="Close order panel"><i class="fa-solid fa-xmark"></i></button>
+      </div>
 
-        <!-- Top meals -->
-        <div class="section-title">
-          <h3 style="margin:0">Top meals this week</h3>
-          <a href="#" style="color:var(--muted);font-size:14px">View all →</a>
-        </div>
-        <div class="meals-grid" id="mealsGrid">
-          <!-- meal cards (sample items) -->
-          <div class="meal-card food-card" data-category="burgers">
-            <img src="https://images.unsplash.com/photo-1568901346375-23c9450c58cd?w=800&q=60" alt="">
-            <div><strong>Original Burger</strong></div>
-            <div class="meal-meta"><div class="price">$4.92</div><button class="add-small">Add</button></div>
-          </div>
+      <ul class="order-list" id="orderList" aria-live="polite"></ul>
 
-          <div class="meal-card food-card" data-category="burgers">
-            <img src="https://images.unsplash.com/photo-1605470207062-1c8f3a83e0ec?w=800&q=60" alt="">
-            <div><strong>Special Burger</strong></div>
-            <div class="meal-meta"><div class="price">$5.59</div><button class="add-small">Add</button></div>
-          </div>
+      <div class="totals">
+        <div style="display:flex;justify-content:space-between"><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
+        <div style="display:flex;justify-content:space-between"><span>Tax (10%)</span><strong id="tax">$0.00</strong></div>
+        <div style="display:flex;justify-content:space-between;margin-top:6px"><span>Total</span><strong id="total">$0.00</strong></div>
+      </div>
 
-          <div class="meal-card food-card" data-category="pizza">
-            <img src="https://images.unsplash.com/photo-1548365328-8d0b321419b9?w=800&q=60" alt="">
-            <div><strong>Pepperoni Pizza</strong></div>
-            <div class="meal-meta"><div class="price">$8.99</div><button class="add-small">Add</button></div>
-          </div>
-        </div>
+      <div style="display:flex;gap:8px;margin-top:10px">
+        <button id="applyCoupon" style="flex:1;border-radius:10px;padding:10px;border:1px solid rgba(15,23,36,0.06);background:#fff;cursor:pointer">Apply coupon</button>
+        <button id="checkoutBtn" class="checkout-btn">Checkout</button>
+      </div>
+    </aside>
 
-        <!-- Favorite restaurants -->
-        <div class="section-title" style="margin-top:18px">
-          <h3 style="margin:0">Your favourite restaurants</h3>
-          <a href="#" style="color:var(--muted);font-size:14px">View all →</a>
-        </div>
-        <div class="cards-row">
-          <div style="background:#fff;border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center">
-            <img src="https://images.unsplash.com/photo-1524182576060-9d6fefb0c7a5?w=800&q=60" style="width:120px;height:84px;object-fit:cover;border-radius:8px">
-            <div>
-              <strong>Best Restaurant</strong>
-              <div style="font-size:13px;color:var(--muted)">4.9 • 200 reviews</div>
-            </div>
-          </div>
-
-          <div style="background:#fff;border-radius:12px;padding:12px;display:flex;gap:12px;align-items:center">
-            <img src="https://images.unsplash.com/photo-1544025162-d76694265947?w=800&q=60" style="width:120px;height:84px;object-fit:cover;border-radius:8px">
-            <div>
-              <strong>Great Eats</strong>
-              <div style="font-size:13px;color:var(--muted)">4.8 • 150 reviews</div>
-            </div>
-          </div>
-        </div>
-      </main>
-
-      <!-- Right panel (hidden until items added) -->
-      <aside class="rightpanel" id="rightpanel" aria-label="My order" style="display:none">
-        <div class="order-header">
-          <div><strong>My Order</strong><div style="font-size:13px;color:var(--muted)">Take out</div></div>
-          <button id="editOrder" style="background:transparent;border:none;color:var(--muted);cursor:pointer">Edit</button>
-        </div>
-
-        <ul class="order-list" id="orderList"></ul>
-
-        <div class="totals">
-          <div style="display:flex;justify-content:space-between"><span>Subtotal</span><strong id="subtotal">$0.00</strong></div>
-          <div style="display:flex;justify-content:space-between"><span>Tax (10%)</span><strong id="tax">$0.00</strong></div>
-          <div style="display:flex;justify-content:space-between;margin-top:6px"><span>Total</span><strong id="total">$0.00</strong></div>
-        </div>
-
-        <div style="display:flex;gap:8px;margin-top:10px">
-          <button style="flex:1;border-radius:10px;padding:10px;border:1px solid rgba(15,23,36,0.06);background:#fff;cursor:pointer">Apply coupon</button>
-          <button id="checkoutBtn" class="checkout-btn">Checkout</button>
-        </div>
-      </aside>
-
-    </div>
   </div>
 
   <!-- Checkout Modal -->
@@ -309,7 +345,7 @@ body.dark [style*="color:var(--muted)"] {
     <div class="modal" role="dialog" aria-label="Order details">
       <div style="display:flex;justify-content:space-between;align-items:center">
         <h3 style="margin:0">Order Details</h3>
-        <button id="closeModal" style="background:transparent;border:none;font-size:20px;cursor:pointer">&times;</button>
+        <button id="closeModal" class="icon-btn" style="background:transparent;border:none;font-size:20px;cursor:pointer" aria-label="Close">&times;</button>
       </div>
 
       <div class="modal-items" id="modalItems"></div>
@@ -329,67 +365,35 @@ body.dark [style*="color:var(--muted)"] {
   </div>
 
   <script>
-/* ----------------------------------------------
-   Dark Mode Toggle (keeps GoMeal color scheme)
------------------------------------------------ */
-document.addEventListener('DOMContentLoaded', () => {
-  const darkToggle = document.getElementById('darkToggle');
-  const icon = darkToggle.querySelector('i');
-
-  // Check saved theme
-  const savedTheme = localStorage.getItem('gomeal_theme');
-  if (savedTheme === 'dark') {
-    document.body.classList.add('dark');
-    icon.className = 'fa-solid fa-sun';
-  }
-
-  // Toggle theme
-  darkToggle.addEventListener('click', () => {
-    document.body.classList.toggle('dark');
-    const isDark = document.body.classList.contains('dark');
-    localStorage.setItem('gomeal_theme', isDark ? 'dark' : 'light');
-    icon.className = isDark ? 'fa-solid fa-sun' : 'fa-regular fa-moon';
-  });
-});
-
   /****************************************************************
    * Dashboard JS
-   * - sidebar burger
-   * - profile upload + persistence
-   * - categories & add-to-cart
-   * - show/hide right panel when cart has items
-   * - checkout modal with tax/service, confirm clears cart & deducts balance
+   * - Sidebar (auto-hidden)
+   * - Dark mode toggle (persisted)
+   * - Profile upload
+   * - Add-to-cart, Right panel behavior
+   * - Checkout modal
    ****************************************************************/
 
   document.addEventListener('DOMContentLoaded', () => {
     // Elements
     const burger = document.getElementById('burger');
     const sidebar = document.getElementById('sidebar');
-    const overlayDiv = document.createElement('div');
-    overlayDiv.style.position = 'fixed';
-    overlayDiv.style.inset = '0';
-    overlayDiv.style.zIndex = '2500';
-    overlayDiv.style.display = 'none';
-    document.body.appendChild(overlayDiv);
-
-    // Profile/avatar
-    const userAvatar = document.getElementById('userAvatar');
+    const screenOverlay = document.getElementById('screenOverlay');
     const sidebarAvatar = document.getElementById('sidebarAvatar');
+    const userAvatar = document.getElementById('userAvatar');
     const uploadPic = document.getElementById('uploadPic');
     const changePicBtn = document.getElementById('changePicBtn');
-    const userNameEl = document.getElementById('userName');
+    const userName = document.getElementById('userName');
     const sidebarName = document.getElementById('sidebarName');
-    const balanceEl = document.getElementById('balanceAmount') || null; // not present in this layout
 
-    // Order elements
     const rightPanel = document.getElementById('rightpanel');
     const orderList = document.getElementById('orderList');
     const subtotalEl = document.getElementById('subtotal');
     const taxEl = document.getElementById('tax');
     const totalEl = document.getElementById('total');
     const checkoutBtn = document.getElementById('checkoutBtn');
+    const closeOrderPanel = document.getElementById('closeOrderPanel');
 
-    // Modal
     const modalBackdrop = document.getElementById('modalBackdrop');
     const modalItems = document.getElementById('modalItems');
     const mSubtotal = document.getElementById('mSubtotal');
@@ -400,37 +404,84 @@ document.addEventListener('DOMContentLoaded', () => {
     const printBill = document.getElementById('printBill');
     const confirmPay = document.getElementById('confirmPay');
 
-    // constants
+    const darkToggle = document.getElementById('darkToggle');
+    const darkIcon = darkToggle.querySelector('i');
+
     const SERVICE_FEE = 1.00;
     const TAX_RATE = 0.10;
 
-    // require logged-in user
-    const loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
+    // Simple demo guard: require loggedInUser or create demo for testing
+    let loggedInUser = JSON.parse(sessionStorage.getItem('loggedInUser') || 'null');
     if (!loggedInUser) {
-      // If you want to test without login, uncomment the demo user line below:
-      // sessionStorage.setItem('loggedInUser', JSON.stringify({ name:'Demo', email:'demo@example.com' }));
-      // location.reload();
-
-      // otherwise redirect:
-      window.location.href = 'login.html';
-      return;
+      // COMMENT/UNCOMMENT the next two lines for testing without login
+      // loggedInUser = { name: 'Demo User', email: 'demo@example.com' };
+      // sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+      // If still not set, redirect to login (you can comment out redirect while developing)
+      // window.location.href = 'login.html';
+      // return;
     }
 
-    // show name
-    if (userNameEl) userNameEl.textContent = loggedInUser.name || 'Guest';
-    if (sidebarName) sidebarName.textContent = 'Hello, ' + (loggedInUser.name || 'Guest');
+    // If demo user available, show name
+    if (loggedInUser) {
+      userName.textContent = loggedInUser.name || 'Guest';
+      sidebarName.textContent = 'Hello, ' + (loggedInUser.name || 'Guest');
 
-    // load avatar
-    const savedAvatar = localStorage.getItem(`avatar_${loggedInUser.email}`);
-    if (savedAvatar) { userAvatar.src = savedAvatar; sidebarAvatar.src = savedAvatar; }
-    else if (loggedInUser.profilePic) { userAvatar.src = loggedInUser.profilePic; sidebarAvatar.src = loggedInUser.profilePic; }
+      const savedAvatar = localStorage.getItem(`avatar_${loggedInUser.email}`);
+      if (savedAvatar) {
+        userAvatar.src = savedAvatar;
+        sidebarAvatar.src = savedAvatar;
+      } else if (loggedInUser.profilePic) {
+        userAvatar.src = loggedInUser.profilePic;
+        sidebarAvatar.src = loggedInUser.profilePic;
+      }
+    } else {
+      // not logged in — show default
+      sidebarName.textContent = 'Hello, Guest';
+    }
 
-    // load balance (default 0)
-    const balKey = `balance_${loggedInUser.email}`;
-    const savedBalance = parseFloat(localStorage.getItem(balKey) || '0');
-    if (document.getElementById('balanceAmount')) document.getElementById('balanceAmount').textContent = `$${savedBalance.toFixed(2)}`;
+    // --- Dark mode: load saved state ---
+    const savedTheme = localStorage.getItem('gomeal_theme');
+    if (savedTheme === 'dark') {
+      document.body.classList.add('dark');
+      darkIcon.className = 'fa-solid fa-sun';
+      darkToggle.setAttribute('aria-pressed', 'true');
+    }
 
-    // avatar upload
+    darkToggle.addEventListener('click', () => {
+      const isDark = document.body.classList.toggle('dark');
+      localStorage.setItem('gomeal_theme', isDark ? 'dark' : 'light');
+      darkIcon.className = isDark ? 'fa-solid fa-sun' : 'fa-regular fa-moon';
+      darkToggle.setAttribute('aria-pressed', isDark ? 'true' : 'false');
+    });
+
+    // --- Sidebar toggle (auto-hidden on all sizes) ---
+    function openSidebar(){
+      sidebar.classList.add('open');
+      screenOverlay.classList.add('show');
+      screenOverlay.setAttribute('aria-hidden', 'false');
+      sidebar.setAttribute('aria-hidden', 'false');
+    }
+    function closeSidebar(){
+      sidebar.classList.remove('open');
+      screenOverlay.classList.remove('show');
+      screenOverlay.setAttribute('aria-hidden', 'true');
+      sidebar.setAttribute('aria-hidden', 'true');
+    }
+    burger.addEventListener('click', () => {
+      if (sidebar.classList.contains('open')) closeSidebar(); else openSidebar();
+    });
+    screenOverlay.addEventListener('click', () => { closeSidebar(); closeRightPanel(); closeModalFunc(); });
+
+    // close sidebar on ESC
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') {
+        closeSidebar();
+        closeRightPanel();
+        closeModalFunc();
+      }
+    });
+
+    // --- profile upload ---
     changePicBtn.addEventListener('click', () => uploadPic.click());
     uploadPic.addEventListener('change', function () {
       const f = this.files[0];
@@ -440,28 +491,37 @@ document.addEventListener('DOMContentLoaded', () => {
         const data = e.target.result;
         userAvatar.src = data;
         sidebarAvatar.src = data;
-        localStorage.setItem(`avatar_${loggedInUser.email}`, data);
-        // update session user
-        loggedInUser.profilePic = data;
-        sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
-        alert('Profile picture updated');
+        if (loggedInUser && loggedInUser.email) {
+          localStorage.setItem(`avatar_${loggedInUser.email}`, data);
+          loggedInUser.profilePic = data;
+          sessionStorage.setItem('loggedInUser', JSON.stringify(loggedInUser));
+        }
       };
       reader.readAsDataURL(f);
     });
 
-    // Sidebar burger toggle (mobile)
-    function openSidebar(){ sidebar.classList.add('open'); sidebar.style.transform = 'translateX(0)'; overlayDiv.style.display = 'block'; overlayDiv.addEventListener('click', closeSidebar); }
-    function closeSidebar(){ sidebar.classList.remove('open'); if (window.innerWidth < 860) sidebar.style.transform = 'translateX(-120%)'; overlayDiv.style.display = 'none'; overlayDiv.removeEventListener('click', closeSidebar); }
-    burger.addEventListener('click', ()=>{ if (sidebar.classList.contains('open')) closeSidebar(); else openSidebar(); });
-    window.addEventListener('resize', ()=>{ if (window.innerWidth >= 860){ sidebar.style.transform = 'translateX(0)'; overlayDiv.style.display='none'; } else { if (!sidebar.classList.contains('open')) sidebar.style.transform = 'translateX(-120%)'; } });
+    // --- cart & right panel ---
+    let cart = [];
+    if (loggedInUser && loggedInUser.email) {
+      try { cart = JSON.parse(localStorage.getItem(`orders_${loggedInUser.email}`) || '[]'); } catch(e){ cart = []; }
+    }
 
-    // Orders: stored per user in localStorage key orders_<email>
-    let cart = JSON.parse(localStorage.getItem(`orders_${loggedInUser.email}`) || '[]');
+    function saveCart() {
+      if (loggedInUser && loggedInUser.email) localStorage.setItem(`orders_${loggedInUser.email}`, JSON.stringify(cart));
+    }
 
-    // update UI function
+    function openRightPanel(){ rightPanel.classList.add('open'); rightPanel.setAttribute('aria-hidden','false'); screenOverlay.classList.add('show'); }
+    function closeRightPanel(){ rightPanel.classList.remove('open'); rightPanel.setAttribute('aria-hidden','true'); screenOverlay.classList.remove('show'); }
+
     function renderCart(){
-      if (!cart || cart.length === 0){ rightPanel.style.display = 'none'; return; }
-      rightPanel.style.display = 'block';
+      if (!cart || cart.length === 0) {
+        closeRightPanel();
+        orderList.innerHTML = '';
+        subtotalEl.textContent = '$0.00'; taxEl.textContent = '$0.00'; totalEl.textContent = '$0.00';
+        return;
+      }
+      // open panel
+      openRightPanel();
       orderList.innerHTML = '';
       let subtotal = 0;
       cart.forEach((it, idx) => {
@@ -472,12 +532,12 @@ document.addEventListener('DOMContentLoaded', () => {
           <img src="${it.img}" alt="${it.name}">
           <div class="item-meta">
             <strong>${it.name}</strong><br>
-            <small style="color:${'var(--muted)'}">$${it.price.toFixed(2)}</small>
+            <small style="color:var(--muted)">$${it.price.toFixed(2)}</small>
           </div>
           <div class="item-controls">
-            <button class="qty-btn minus" data-index="${idx}">-</button>
-            <span style="min-width:22px;text-align:center">${it.qty}</span>
-            <button class="qty-btn plus" data-index="${idx}">+</button>
+            <button class="qty-btn minus" data-index="${idx}" aria-label="decrease">-</button>
+            <span style="min-width:24px;text-align:center">${it.qty}</span>
+            <button class="qty-btn plus" data-index="${idx}" aria-label="increase">+</button>
           </div>
         `;
         orderList.appendChild(li);
@@ -489,13 +549,13 @@ document.addEventListener('DOMContentLoaded', () => {
       taxEl.textContent = `$${tax.toFixed(2)}`;
       totalEl.textContent = `$${total.toFixed(2)}`;
 
-      // attach qty handlers
+      // quantity handlers
       document.querySelectorAll('.qty-btn').forEach(btn=>{
-        btn.addEventListener('click', (e)=>{
-          const i = parseInt(e.currentTarget.dataset.index);
-          if (e.currentTarget.classList.contains('plus')) cart[i].qty++;
-          else { cart[i].qty--; if (cart[i].qty <= 0) cart.splice(i,1); }
-          localStorage.setItem(`orders_${loggedInUser.email}`, JSON.stringify(cart));
+        btn.addEventListener('click', (e)=> {
+          const idx = Number(e.currentTarget.dataset.index);
+          if (e.currentTarget.classList.contains('plus')) cart[idx].qty++;
+          else { cart[idx].qty--; if (cart[idx].qty <= 0) cart.splice(idx,1); }
+          saveCart();
           renderCart();
         });
       });
@@ -504,11 +564,11 @@ document.addEventListener('DOMContentLoaded', () => {
     // initial render
     renderCart();
 
-    // Add-to-cart from meal cards
-    document.querySelectorAll('.meal-card .add-small').forEach((btn, idx)=>{
+    // adding items to cart
+    document.querySelectorAll('.meal-card .add-small').forEach(btn=>{
       btn.addEventListener('click', (e)=>{
         const card = e.target.closest('.meal-card');
-        const name = card.querySelector('strong').innerText.trim();
+        const name = card.querySelector('.meal-title').innerText.trim();
         const priceText = card.querySelector('.price').innerText.replace('$','').trim();
         const price = parseFloat(priceText) || 0;
         const img = card.querySelector('img').src;
@@ -517,22 +577,26 @@ document.addEventListener('DOMContentLoaded', () => {
         if (found) found.qty++;
         else cart.push({ name, price, img, qty: 1 });
 
-        localStorage.setItem(`orders_${loggedInUser.email}`, JSON.stringify(cart));
+        saveCart();
         renderCart();
       });
     });
 
-    // Checkout modal open
-    checkoutBtn && checkoutBtn.addEventListener('click', ()=>{
+    // close order panel button
+    closeOrderPanel.addEventListener('click', closeRightPanel);
+
+    // checkout -> open modal
+    checkoutBtn.addEventListener('click', ()=> {
       if (!cart || cart.length === 0) { alert('No items in order'); return; }
       // populate modal
       modalItems.innerHTML = '';
       let subtotal = 0;
       cart.forEach(it=>{
-        const itemTotal = it.price * it.qty; subtotal += itemTotal;
+        const itemTotal = it.price * it.qty;
+        subtotal += itemTotal;
         const div = document.createElement('div');
-        div.style.display = 'flex'; div.style.justifyContent = 'space-between'; div.style.padding = '8px 0';
-        div.innerHTML = `<div style="display:flex;gap:10px;align-items:center"><img src="${it.img}" style="width:56px;height:56px;border-radius:8px;object-fit:cover"><div><strong>${it.name}</strong><div style="font-size:13px;color:${'var(--muted)'}">$${it.price.toFixed(2)} × ${it.qty}</div></div></div><div style="font-weight:700">$${itemTotal.toFixed(2)}</div>`;
+        div.style.display='flex'; div.style.justifyContent='space-between'; div.style.padding='8px 0';
+        div.innerHTML = `<div style="display:flex;gap:10px;align-items:center"><img src="${it.img}" style="width:56px;height:56px;border-radius:8px;object-fit:cover"><div><strong>${it.name}</strong><div style="font-size:13px;color:var(--muted)">$${it.price.toFixed(2)} × ${it.qty}</div></div></div><div style="font-weight:700">$${itemTotal.toFixed(2)}</div>`;
         modalItems.appendChild(div);
       });
       const tax = subtotal * TAX_RATE;
@@ -544,48 +608,57 @@ document.addEventListener('DOMContentLoaded', () => {
 
       modalBackdrop.classList.add('show');
       modalBackdrop.style.display = 'flex';
+      modalBackdrop.setAttribute('aria-hidden','false');
+      screenOverlay.classList.add('show');
     });
 
-    // modal events
-    closeModal.addEventListener('click', ()=>{ modalBackdrop.classList.remove('show'); modalBackdrop.style.display='none'; });
-    modalBackdrop.addEventListener('click', (e)=>{ if (e.target === modalBackdrop) { modalBackdrop.classList.remove('show'); modalBackdrop.style.display='none'; } });
+    function closeModalFunc(){
+      modalBackdrop.classList.remove('show');
+      modalBackdrop.style.display = 'none';
+      modalBackdrop.setAttribute('aria-hidden','true');
+      screenOverlay.classList.remove('show');
+    }
 
-    // print
+    closeModal.addEventListener('click', closeModalFunc);
+    modalBackdrop.addEventListener('click', (e)=>{ if (e.target === modalBackdrop) closeModalFunc(); });
+
     printBill.addEventListener('click', ()=> window.print());
 
-    // confirm pay
-    confirmPay.addEventListener('click', ()=>{
-      // check logged user
+    confirmPay.addEventListener('click', ()=> {
       if (!loggedInUser) { alert('Please login'); return; }
-      // compute total
       let subtotal = 0; cart.forEach(it=> subtotal += it.price * it.qty);
       const tax = subtotal * TAX_RATE;
       const total = subtotal + tax + SERVICE_FEE;
 
-      // deduct from balance (if exists)
-      const key = `balance_${loggedInUser.email}`; let bal = parseFloat(localStorage.getItem(key) || '0');
+      // deduct from balance (demo)
+      const key = `balance_${loggedInUser ? loggedInUser.email : 'demo'}`;
+      let bal = parseFloat(localStorage.getItem(key) || '0');
       bal = parseFloat((bal - total).toFixed(2));
       localStorage.setItem(key, bal.toFixed(2));
+
       // clear cart
-      cart = []; localStorage.removeItem(`orders_${loggedInUser.email}`);
+      cart = [];
+      if (loggedInUser && loggedInUser.email) localStorage.removeItem(`orders_${loggedInUser.email}`);
       renderCart();
-      modalBackdrop.classList.remove('show'); modalBackdrop.style.display='none';
+      closeModalFunc();
       alert('✅ Order placed successfully!');
-      // update displayed balance where applicable
-      if (document.getElementById('balanceAmount')) document.getElementById('balanceAmount').textContent = `$${bal.toFixed(2)}`;
     });
 
-    // nav logout (simple)
-    document.querySelectorAll('.nav-item').forEach(btn=>{
-      if (btn.innerText.trim().toLowerCase().includes('logout')){
-        btn.addEventListener('click', ()=> {
-          sessionStorage.removeItem('loggedInUser');
-          // redirect to login
-          window.location.href = 'login.html';
-        });
-      }
+    // logout nav
+    const logoutBtn = document.getElementById('logoutBtn');
+    if (logoutBtn) logoutBtn.addEventListener('click', ()=> {
+      sessionStorage.removeItem('loggedInUser');
+      // redirect (uncomment or change to a path in your app)
+      window.location.href = 'login.html';
     });
 
+    // make panels draggable-friendly on resize (ensure remain hidden until opened)
+    window.addEventListener('resize', ()=> {
+      // keep sidebar/rightpanel hidden on resize (auto-hide behavior)
+      if (!sidebar.classList.contains('open')) sidebar.style.transform = 'translateX(-120%)';
+      if (!rightPanel.classList.contains('open')) rightPanel.style.transform = 'translateX(120%)';
+      screenOverlay.classList.remove('show');
+    });
   });
   </script>
 </body>
